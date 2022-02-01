@@ -16,7 +16,6 @@ export default function createGameManager() {
 
   function selectWord() {
     return "deers"; // ! TEMP
-    // ! BUG: currently "qwert" returns 00120, rather than 00220
   }
 
   function addLetter(letter) {
@@ -49,7 +48,7 @@ export default function createGameManager() {
       hooks.onWin.pub();
 
     } else if (checkWordValid(guess)) {
-      const scores = guessResult(guess);
+      const scores = scoreGuess(guess);
 
       hooks.onSubmitGuess.pub({
         row: currentRow,
@@ -62,7 +61,7 @@ export default function createGameManager() {
     }
   }
 
-  function guessResult(guess) {
+  function scoreGuess(guess) {
     let selectedWordArr = selectedWord.split("");
 
     // 0 = miss, 1 = adjacent, 2 = hit
@@ -78,6 +77,10 @@ export default function createGameManager() {
 
     // find "adjacent" letters (where they're in the word but wrong place)
     for (let i = 0; i < NUM_LETTERS; i++) {
+      if (result[i] == 2) {
+        continue;
+      }
+
       const guessLetterIndex = selectedWordArr.indexOf(guess[i]);
 
       if (guessLetterIndex > -1) {
