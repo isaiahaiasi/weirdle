@@ -12,29 +12,25 @@ export default function createGameManager() {
   let currentRow = 0;
   let currentCol = 0;
 
-  const boardUpdatePublisher = createPublisher();
-  const guessSubmitPublisher = createPublisher();
+  const hooks = createGameManagerEventHooks();
 
   function selectWord() {
     return "deers"; // ! TEMP
+    // ! BUG: currently "qwert" returns 00120, rather than 00220
   }
 
   function addLetter(letter) {
     if (currentCol < NUM_LETTERS) {
       wordArray[currentRow][currentCol] = letter;
       console.log(wordArray[currentRow].join(''));
-      boardUpdatePublisher.pub();
+      hooks.onLetterInput.pub();
       currentCol++;
     }
   }
 
-  function handleLetterClick(e) {
-    const letter = e.target.textContent;
-    addLetter(letter);
-  }
-
   function checkWordValid(guess) {
     // see if guess is in valid words list
+    // TODO
     return true;
   }
 
@@ -43,11 +39,22 @@ export default function createGameManager() {
 
     if (currentCol < NUM_LETTERS - 2) {
       console.log("not enough letters!")
+      hooks.onInvalidGuess.pub();
     } else if (guess === selectedWord) {
       console.log("win");
+      hooks.onSubmitGuess.pub({
+        row: currentRow,
+        scores: new Array(NUM_LETTERS).fill(2),
+      });
+      hooks.onWin.pub();
+
     } else if (checkWordValid(guess)) {
-      console.log("keep trying");
-      console.log(guessResult(guess));
+      const scores = guessResult(guess);
+
+      hooks.onSubmitGuess.pub({
+        row: currentRow,
+        scores
+      });
       currentCol = 0;
       currentRow++;
     } else {
@@ -87,7 +94,16 @@ export default function createGameManager() {
     addLetter,
     submitGuess,
     wordArray,
-    boardUpdatePublisher,
-    guessSubmitPublisher,
+    hooks,
+  }
+}
+
+function createGameManagerEventHooks() {
+  return {
+    onLetterInput: createPublisher(),
+    onSubmitGuess: createPublisher(),
+    onWin: createPublisher(),
+    onLose: createPublisher(),
+    onInvalidGuess: createPublisher(),
   }
 }

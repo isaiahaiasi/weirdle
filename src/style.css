@@ -8,6 +8,11 @@
     --keyboard-height: 200px;
     --game-board-width: 350px;
     --game-board-height: 420px;
+
+    /* colors */
+    --col-cell-wrong: red;
+    --col-cell-close: yellow;
+    --col-cell-correct: green;
 }
 
 html, body {
@@ -53,6 +58,18 @@ body {
 .game-board__cell {
     flex: 1;
     border: 2px solid red;
+}
+
+.game-board__cell--wrong {
+    background-color: var(--col-cell-wrong);
+}
+
+.game-board__cell--correct {
+    background-color: var(--col-cell-correct);
+}
+
+.game-board__cell--close {
+    background-color: var(--col-cell-close);
 }
 
 .keyboard {

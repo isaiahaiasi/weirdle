@@ -5,7 +5,7 @@ export default function createPublisher(...args) {
     listeners.push(listener);
   }
 
-  function pub() {
+  function pub(...args) {
     listeners.forEach(listener => listener(...args));
   }
 
