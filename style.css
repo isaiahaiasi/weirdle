@@ -1,0 +1,86 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --keyboard-height: 200px;
+    --game-board-width: 350px;
+    --game-board-height: 420px;
+}
+
+html, body {
+    height: 100%;
+}
+
+header {
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.game-board__container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-board {
+    --game-board-gap: .25rem;
+
+    width: var(--game-board-width);
+    height: var(--game-board-height);
+
+    display: flex;
+    flex-direction:column;
+    gap: var(--game-board-gap);
+}
+
+.game-board__row {
+    flex: 1;
+    display: flex;
+    gap: var(--game-board-gap);
+}
+
+.game-board__cell {
+    flex: 1;
+    border: 2px solid red;
+}
+
+.keyboard {
+    height: var(--keyboard-height);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: .25rem;
+    padding: .25rem;
+}
+
+.keyboard__row {
+    width: 100%;
+    max-width: 40rem;
+    flex: 1 0 auto;
+    display: flex;
+    gap: .25rem;
+}
+
+.keyboard__key {
+    flex: 1;
+}
+
+.keyboard__key--halfwidth {
+    flex: .5;
+}
+
+.keyboard__key--extrawidth {
+    flex: 1.5;
+}
