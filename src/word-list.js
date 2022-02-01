@@ -1,5 +1,5 @@
-{
-    "answerList": [
+export default {
+    answerList: [
         "cigar",
         "rebut",
         "sissy",
@@ -2316,7 +2316,7 @@
         "rural",
         "shave"
     ],
-    "sourceList": [
+    sourceList: [
         "aahed",
         "aalii",
         "aargh",

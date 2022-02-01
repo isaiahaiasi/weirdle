@@ -1,3 +1,5 @@
+import './style.css';
+
 const NUM_GUESSES = 6;
 const NUM_LETTERS = 5;
 
@@ -24,7 +26,7 @@ function populateHtml(gameManager) {
   function createElement(tag, classes = []) {
     const el = document.createElement(tag);
 
-    for (c of classes) {
+    for (const c of classes) {
       el.classList.add(c);
     }
 
@@ -48,7 +50,7 @@ function populateHtml(gameManager) {
 
   function populateGameKeyboard(keyboardContainer) {
     function fillLetterKeys(rowElement, charStr) {
-      for (ch of charStr.split('')) {
+      for (const ch of charStr.split('')) {
         const kbKey = createElement("button", ["keyboard__key"]);
         kbKey.textContent = ch.toUpperCase();
         kbKey.addEventListener("click", gameManager.handleLetterClick)
