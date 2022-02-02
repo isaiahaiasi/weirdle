@@ -1,5 +1,5 @@
 import { NUM_GUESSES, NUM_LETTERS } from '../utils/constants';
-import { createElement } from '../utils/dom_utils';
+import { assignClassByScore, createElement } from '../utils/dom_utils';
 
 export default function createGameboard(boardContainer, gameManager) {
   const board = [];
@@ -7,18 +7,13 @@ export default function createGameboard(boardContainer, gameManager) {
   function handleGuessResult({ row, scores }) {
     for (let i = 0; i < NUM_LETTERS; i++) {
       const cell = board[row][i];
-      switch (scores[i]) {
-        case 0:
-          cell?.classList.add("game-board__cell--wrong");
-          break;
-        case 1:
-          cell?.classList.add("game-board__cell--close");
-          break;
-        case 2:
-          cell?.classList.add("game-board__cell--correct");
-          break;
-        default:
-          console.error("UNHANDLED VALUE IN RESULT");
+
+      if (cell) {
+        assignClassByScore(cell, scores[i], {
+          0: "game-board__cell--wrong",
+          1: "game-board__cell--close",
+          2: "game-board__cell--correct",
+        })
       }
     }
   }
