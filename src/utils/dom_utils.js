@@ -8,3 +8,12 @@ export function createElement(tag, classes = []) {
 
   return el;
 }
+
+export function assignClassByScore(element, guessScore, scoreMap) {
+  for (const [score, cssClass] of Object.entries(scoreMap)) {
+    element.classList.remove(cssClass);
+    if (score == guessScore) {
+      element.classList.add(cssClass);
+    }
+  }
+}

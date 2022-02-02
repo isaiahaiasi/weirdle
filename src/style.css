@@ -72,6 +72,18 @@ body {
     background-color: var(--col-cell-close);
 }
 
+.keyboard__key--wrong {
+    background-color: var(--col-cell-wrong);
+}
+
+.keyboard__key--correct {
+    background-color: var(--col-cell-correct);
+}
+
+.keyboard__key--close {
+    background-color: var(--col-cell-close);
+}
+
 .keyboard {
     height: var(--keyboard-height);
     display: flex;
@@ -92,6 +104,8 @@ body {
 
 .keyboard__key {
     flex: 1;
+    border: 1px solid grey;
+    border-radius: 4px;
 }
 
 .keyboard__key--halfwidth {

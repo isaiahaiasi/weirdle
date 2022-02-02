@@ -1,6 +1,9 @@
-import { createElement } from '../utils/dom_utils';
+import { assignClassByScore, createElement } from '../utils/dom_utils';
 
 export default function createKeyboard(keyboardContainer, gameManager) {
+  const letterResults = {};
+  const keyElements = {};
+
   function createKbRow() {
     return createElement("div", ["keyboard__row"]);
   }
@@ -14,19 +17,20 @@ export default function createKeyboard(keyboardContainer, gameManager) {
         (e) => gameManager.addLetter(e.target.textContent)
       );
       rowElement.appendChild(kbKey);
+      keyElements[ch] = kbKey;
     }
   }
 
   function fillKeyboard() {
     // row 1: no special case
     const kbRowTop = createKbRow();
-    fillKeybaordRowLetters(kbRowTop, "QWERTYUIOP");
+    fillKeybaordRowLetters(kbRowTop, "qwertyuiop");
     keyboardContainer.appendChild(kbRowTop);
 
     // row 2: needs halfwidth spacer on each side
     const kbRowMid = createKbRow();
     kbRowMid.appendChild(createElement("div", ["keyboard__key--halfwidth"]));
-    fillKeybaordRowLetters(kbRowMid, "ASDFGHJKL");
+    fillKeybaordRowLetters(kbRowMid, "asdfghjkl");
     kbRowMid.appendChild(createElement("div", ["keyboard__key--halfwidth"]));
     keyboardContainer.appendChild(kbRowMid);
 
@@ -35,15 +39,40 @@ export default function createKeyboard(keyboardContainer, gameManager) {
 
     const enterBtn = createElement("button", ["keyboard__key--extrawidth"]);
     enterBtn.addEventListener("click", gameManager.submitGuess);
+    kbRowBottom.appendChild(enterBtn);
+    
+    fillKeybaordRowLetters(kbRowBottom, "zxcvbnm");
 
     const delBtn = createElement("button", ["keyboard__key--extrawidth"]);
     delBtn.addEventListener("click", gameManager.removeLetter);
-
-    kbRowBottom.appendChild(enterBtn);
-    fillKeybaordRowLetters(kbRowBottom, "ZXCVBNM");
     kbRowBottom.appendChild(delBtn);
+  
     keyboardContainer.appendChild(kbRowBottom);
   }
+
+  function updateLetterResults({ scores, guess }) {
+    for (let i = 0; i < guess.length; i++) {
+      const ch = guess[i];
+      if (!letterResults[ch] || scores[i] > letterResults[ch]) {
+        letterResults[ch] = scores[i];
+      }
+    }
+  }
+
+  function updateKeyStyles() {
+    for (let [ch, score] of Object.entries(letterResults)) {
+      assignClassByScore(keyElements[ch], score, {
+        0: "keyboard__key--wrong",
+        1: "keyboard__key--close",
+        2: "keyboard__key--correct",
+      })
+    }
+  }
+
+  gameManager.hooks.onSubmitGuess.sub(({ scores, guess }) => {
+    updateLetterResults({ scores, guess });
+    updateKeyStyles();
+  })
 
   fillKeyboard();
 }

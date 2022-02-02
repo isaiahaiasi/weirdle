@@ -53,6 +53,7 @@ export default function createGameManager() {
       hooks.onSubmitGuess.pub({
         row: currentRow,
         scores: new Array(NUM_LETTERS).fill(2),
+        guess
       });
       hooks.onWin.pub();
 
@@ -61,7 +62,8 @@ export default function createGameManager() {
 
       hooks.onSubmitGuess.pub({
         row: currentRow,
-        scores
+        scores,
+        guess
       });
       currentCol = 0;
       currentRow++;
