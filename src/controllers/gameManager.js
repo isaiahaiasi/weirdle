@@ -23,9 +23,17 @@ export default function createGameManager() {
   function addLetter(letter) {
     if (currentCol < NUM_LETTERS) {
       wordArray[currentRow][currentCol] = letter;
-      console.log(wordArray[currentRow].join(''));
       hooks.onLetterInput.pub();
       currentCol++;
+    }
+  }
+
+  function removeLetter() {
+    console.log("remove")
+    if (currentCol > 0) {
+      wordArray[currentRow].pop();
+      hooks.onLetterInput.pub();
+      currentCol--;
     }
   }
 
@@ -96,6 +104,7 @@ export default function createGameManager() {
 
   return {
     addLetter,
+    removeLetter,
     submitGuess,
     wordArray,
     hooks,

@@ -32,9 +32,12 @@ export default function createKeyboard(keyboardContainer, gameManager) {
 
     // row 3: needs extrawidth enter & delete keys on each side
     const kbRowBottom = createKbRow();
+
     const enterBtn = createElement("button", ["keyboard__key--extrawidth"]);
     enterBtn.addEventListener("click", gameManager.submitGuess);
+
     const delBtn = createElement("button", ["keyboard__key--extrawidth"]);
+    delBtn.addEventListener("click", gameManager.removeLetter);
 
     kbRowBottom.appendChild(enterBtn);
     fillKeybaordRowLetters(kbRowBottom, "ZXCVBNM");
