@@ -1,9 +1,10 @@
 import { NUM_GUESSES, NUM_LETTERS } from '../utils/constants';
 import createPublisher from '../utils/mini_pubsub';
+import wordlist from "../word-list";
 
 export default function createGameManager() {
   const wordArray = [];
-  const selectedWord = selectWord();
+  const selectedWord = getWord();
 
   for (let i = 0; i < NUM_GUESSES; i++) {
     wordArray.push([]);
@@ -14,8 +15,9 @@ export default function createGameManager() {
 
   const hooks = createGameManagerEventHooks();
 
-  function selectWord() {
-    return "deers"; // ! TEMP
+  function getWord() {
+    const wordIndex = Math.floor(Math.random() * wordlist.answerList.length);
+    return wordlist.answerList[wordIndex];
   }
 
   function addLetter(letter) {
@@ -28,9 +30,8 @@ export default function createGameManager() {
   }
 
   function checkWordValid(guess) {
-    // see if guess is in valid words list
-    // TODO
-    return true;
+    return wordlist.answerList.includes(guess)
+      || wordlist.sourceList.includes(guess);
   }
 
   function submitGuess() {
