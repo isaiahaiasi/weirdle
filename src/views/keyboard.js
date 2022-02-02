@@ -74,5 +74,24 @@ export default function createKeyboard(keyboardContainer, gameManager) {
     updateKeyStyles();
   })
 
+  function registerKeydownEvent() {
+    document.addEventListener("keydown", (e) => {
+      const input = e.key.toUpperCase();
+
+      if (/^[A-Z]$/i.exec(input)) {
+        gameManager.addLetter(input);
+      }
+
+      if (input == "BACKSPACE" || input == "DELETE") {
+        gameManager.removeLetter();
+      }
+
+      if (input == "ENTER" || input == "RETURN") {
+        gameManager.submitGuess();
+      }
+    })
+  }
+
   fillKeyboard();
+  registerKeydownEvent();
 }
