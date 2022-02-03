@@ -28,7 +28,7 @@ export default function createGameboard(boardContainer, gameManager) {
       const gameBoardCellEl = createElement('div', ["game-board__cell"]);
       gameBoardCellEl.setAttribute("data-cell", `${row},${col}`);
       gameManager.hooks.onLetterInput.sub(() => {
-        gameBoardCellEl.textContent = gameManager.wordArray[row][col];
+        gameBoardCellEl.textContent = gameManager.getWord(row)[col];
       });
 
       gameBoardRowEl.appendChild(gameBoardCellEl);

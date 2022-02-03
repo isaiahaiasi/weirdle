@@ -21,7 +21,7 @@ export default function createKeyboard(keyboardContainer, gameManager) {
     }
   }
 
-  function fillKeyboard() {
+  function renderKeyboard() {
     // row 1: no special case
     const kbRowTop = createKbRow();
     fillKeybaordRowLetters(kbRowTop, "qwertyuiop");
@@ -74,24 +74,36 @@ export default function createKeyboard(keyboardContainer, gameManager) {
     updateKeyStyles();
   })
 
+  function handleKeydown(e) {
+    const input = e.key.toUpperCase();
+
+    if (/^[A-Z]$/i.exec(input)) {
+      gameManager.addLetter(input);
+    }
+
+    if (input == "BACKSPACE" || input == "DELETE") {
+      gameManager.removeLetter();
+    }
+
+    if (input == "ENTER" || input == "RETURN") {
+      gameManager.submitGuess();
+    }
+  }
+
   function registerKeydownEvent() {
-    document.addEventListener("keydown", (e) => {
-      const input = e.key.toUpperCase();
-
-      if (/^[A-Z]$/i.exec(input)) {
-        gameManager.addLetter(input);
-      }
-
-      if (input == "BACKSPACE" || input == "DELETE") {
-        gameManager.removeLetter();
-      }
-
-      if (input == "ENTER" || input == "RETURN") {
-        gameManager.submitGuess();
-      }
+    document.addEventListener("keydown", handleKeydown);
+    
+    // This isn't a great proxy for the mount "event",
+    // which is implicitly just the function being called.
+    // if there were an "on remove element from dom" event,
+    // that would be better, but otherwise it might be necessary
+    // to create lifecycle hooks for the View components??
+    // (that would be neat anyway, kinda. Like, mini class-based components)
+    gameManager.hooks.onRestart.sub(() => {
+      document.removeEventListener("keydown", handleKeydown);
     })
   }
 
-  fillKeyboard();
+  renderKeyboard();
   registerKeydownEvent();
 }

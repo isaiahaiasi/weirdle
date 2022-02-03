@@ -17,3 +17,10 @@ export function assignClassByScore(element, guessScore, scoreMap) {
     }
   }
 }
+
+export function removeChildren(element) {
+  let child;
+  while(child = element.firstChild) {
+    element.removeChild(child);
+  }
+}

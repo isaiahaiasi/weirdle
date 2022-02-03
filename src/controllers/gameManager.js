@@ -3,21 +3,41 @@ import createPublisher from '../utils/mini_pubsub';
 import wordlist from "../word-list";
 
 export default function createGameManager() {
-  const wordArray = [];
-  const selectedWord = getWord();
-
-  for (let i = 0; i < NUM_GUESSES; i++) {
-    wordArray.push([]);
-  }
-
+  let wordArray = [];
+  let selectedWord = "";
   let currentRow = 0;
   let currentCol = 0;
 
-  const hooks = createGameManagerEventHooks();
+  const hooks = {
+    onLetterInput: createPublisher(),
+    onSubmitGuess: createPublisher(),
+    onWin: createPublisher(),
+    onLose: createPublisher(),
+    onInvalidGuess: createPublisher(),
+    onRestart: createPublisher(),
+  };
 
-  function getWord() {
+  function initializeBoard() {
+    currentRow = 0;
+    currentCol = 0;
+
+    wordArray = [];
+    for (let i = 0; i < NUM_GUESSES; i++) {
+      wordArray.push([]);
+    }
+
+    selectedWord = chooseWinningWord();
+
+    hooks.onRestart.pub();
+  }
+
+  function chooseWinningWord() {
     const wordIndex = Math.floor(Math.random() * wordlist.answerList.length);
     return wordlist.answerList[wordIndex];
+  }
+
+  function getWord(row) {
+    return wordArray[row] 
   }
 
   function addLetter(letter) {
@@ -104,21 +124,15 @@ export default function createGameManager() {
     return result;
   }
 
+  initializeBoard();
+
   return {
     addLetter,
     removeLetter,
     submitGuess,
-    wordArray,
+    getWord,
     hooks,
+    initializeBoard
   }
 }
 
-function createGameManagerEventHooks() {
-  return {
-    onLetterInput: createPublisher(),
-    onSubmitGuess: createPublisher(),
-    onWin: createPublisher(),
-    onLose: createPublisher(),
-    onInvalidGuess: createPublisher(),
-  }
-}
